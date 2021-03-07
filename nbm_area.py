@@ -8,7 +8,7 @@ now  = datetime.utcnow()-timedelta(hours=1)
 data = xr.open_dataset(f'http://nomads.ncep.noaa.gov:80/dods/blend/blend{now:%Y%m%d}/blend_1hr_{str(now.hour).zfill(2)}z')
 
 # Extract specifc variables
-data = data[['tmp2m', 'dpt2m', 'wdir10m', 'wind10m', 'gust10m', 'apcpsfc', 'apcp254gtsfc', 'tstmsfc', 'tcdcsfc', 'asnow1016gtsfc', 'asnowsfc']]
+data = data[['tmp2m', 'dpt2m', 'wdir10m', 'wind10m', 'gust10m', 'apcpsfc', 'apcp254gtsfc', 'tstmsfc', 'tcdcsfc', 'asnow1016gtsfc', 'asnowsfc', 'rh2m']]
 
 # Slice dataset to bounds
 data = data.sel(lat=slice(36.25, 36.54), lon=slice(-83.10, -82.65))
@@ -20,14 +20,12 @@ data
 # Setup Plot 
 fig, axs = plt.subplots(ncols=1, nrows=6, constrained_layout=True, figsize=(15, 10))
 
-# Add title
-#plt.suptitle(f'weather.carterhumphreys.com', fontsize=16)
 
 # Change datetiem64 to datetime
 valid = datetime.utcfromtimestamp(data.time[0].values.astype('O')/1e9)
 
 # Add plot headers
-axs[0].set_title(f'NBM Meteogram for Hamblen County, TN', loc='left')
+axs[0].set_title(f'NBM Area-Averaged Meteogram for Hamblen County, TN', loc='left')
 axs[0].set_title(f'Run: {valid.strftime("%a %Y-%m-%d %H:%M")} UTC', loc='right')
 
 # 2m Temperature and Dewpoint
@@ -48,6 +46,7 @@ axs[3].plot(data.time, data.tcdcsfc, label='Cloud Cover', color='gray', linewidt
 axs[3].plot(data.time, data.apcp254gtsfc, label='Prob Precipitation', color='green', linewidth=2, marker='o')
 axs[3].plot(data.time, data.tstmsfc, label='Prob Thunder', color='red', linewidth=2, marker='o')
 axs[3].plot(data.time, data.asnow1016gtsfc, label='Prob Snow', color='blue', linewidth=2, marker='o')
+#axs[3].plot(data.time, data.rh2m, label='RH', color='orange', linewidth=2, marker='o')
 axs[3].set_ylim(0, 100)
 
 # Precipitation
