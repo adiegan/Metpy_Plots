@@ -1,3 +1,3 @@
-# Metpy_Plots
+# Metpy Plots
 
-Many of these scripts are curtosy of Jack Sillin. Thanks, Jack!
+Variety of python scripts to download and display data from NOMADS.
